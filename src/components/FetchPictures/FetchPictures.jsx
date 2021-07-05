@@ -18,13 +18,23 @@ export default class FetchPictures extends Component {
     page: 1,
   };
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidMount(prevProps, prevState) {
+    this.props.getHeightGallery();
+  }
+
+  async componentDidUpdate(prevProps, prevState) {
     const prevSearchQuery = prevProps.searchQuery;
     const nextSearchQuery = this.props.searchQuery;
+
+    const prevpictures = prevState.pictures;
+    const nextpictures = this.state.pictures;
 
     if (prevSearchQuery !== nextSearchQuery) {
       this.setState({ pictures: [], page: 1, status: Status.PENDING });
       this.fetchPictures();
+    }
+    if (nextpictures.length > prevpictures.length) {
+      this.props.getHeightGallery();
     }
   }
 

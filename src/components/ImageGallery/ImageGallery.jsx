@@ -3,7 +3,7 @@ import { Gallery } from './ImageGallery.styled';
 
 function ImageGallery({ pictures, handleImageClick }) {
   return (
-    <Gallery>
+    <Gallery id="imageGallery">
       {pictures.map(({ id, webformatURL, largeImageURL, tags }) => (
         <ImageGalleryItem
           key={id}
