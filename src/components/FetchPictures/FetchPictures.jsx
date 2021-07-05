@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import { toast } from 'react-toastify';
 
 import ImageGallery from 'components/ImageGallery';
 import apiService from 'services/apiService';
@@ -24,6 +25,9 @@ export default class FetchPictures extends Component {
     const prevPictures = prevState.pictures;
     const nextPictures = this.state.pictures;
 
+    const prevError = prevState.error;
+    const nextError = this.state.error;
+
     if (prevSearchQuery !== nextSearchQuery) {
       this.setState({
         pictures: [],
@@ -36,6 +40,9 @@ export default class FetchPictures extends Component {
     }
     if (nextPictures.length > prevPictures.length) {
       this.props.getHeightGallery();
+    }
+    if (prevError !== nextError) {
+      toast.error(nextError);
     }
   }
 
