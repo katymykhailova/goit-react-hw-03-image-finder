@@ -8,20 +8,15 @@ class App extends Component {
   state = {
     searchQuery: '',
     showModal: false,
-    largeImageURL: null,
+    largeImageURL: '',
     imgTags: '',
     heightGallery: 0,
   };
 
   componentDidUpdate(prevProps, prevState) {
-    const nextlargeImageURL = this.state.largeImageURL;
-    const prevlargeImageURL = prevState.largeImageURL;
     const nextHeightGallery = this.state.heightGallery;
     const prevHeightGallery = prevState.heightGallery;
 
-    if (nextlargeImageURL !== prevlargeImageURL) {
-      this.toggleModal();
-    }
     if (nextHeightGallery !== prevHeightGallery && prevHeightGallery !== 0) {
       this.scrollTo(prevHeightGallery);
     }
@@ -33,6 +28,7 @@ class App extends Component {
 
   handleImageClick = (largeImageURL, imgTags) => {
     this.setState({ largeImageURL, imgTags });
+    this.toggleModal();
   };
 
   toggleModal = () => {
@@ -78,13 +74,3 @@ class App extends Component {
 }
 
 export default App;
-
-//const heightFormContainer = refs.formContainer.clientHeight;
-//let heightGalleryContainer = 0;
-
-// function scrollTo() {
-//   window.scrollTo({
-//     top: heightGalleryContainer + heightFormContainer,
-//     behavior: 'smooth',
-//   });
-// }

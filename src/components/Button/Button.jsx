@@ -1,11 +1,23 @@
-import { LoadLoreButton } from './Button.styled';
+import { LoadMoreButton } from './Button.styled';
+import PropTypes from 'prop-types';
 
 function Button({ children, onClick, ...allyProps }) {
   return (
-    <LoadLoreButton type="button" onClick={onClick} {...allyProps}>
+    <LoadMoreButton type="button" onClick={onClick} {...allyProps}>
       {children}
-    </LoadLoreButton>
+    </LoadMoreButton>
   );
 }
+
+Button.defaultProps = {
+  onClick: () => null,
+  children: null,
+};
+
+Button.propTypes = {
+  onClick: PropTypes.func,
+  children: PropTypes.node,
+  'aria-label': PropTypes.string.isRequired,
+};
 
 export default Button;

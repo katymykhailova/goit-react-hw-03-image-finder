@@ -1,12 +1,13 @@
 import { Component } from 'react';
 import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
 
 import ImageGallery from 'components/ImageGallery';
 import apiService from 'services/apiService';
 import Button from 'components/Button';
 import Loader from 'components/Loader';
 
-export default class FetchPictures extends Component {
+class FetchPictures extends Component {
   state = {
     pictures: [],
     error: null,
@@ -95,3 +96,11 @@ export default class FetchPictures extends Component {
     );
   }
 }
+
+FetchPictures.propTypes = {
+  searchQuery: PropTypes.string,
+  handleImageClick: PropTypes.func,
+  getHeightGallery: PropTypes.func,
+};
+
+export default FetchPictures;

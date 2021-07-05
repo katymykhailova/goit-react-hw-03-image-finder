@@ -1,6 +1,6 @@
 import styled from '@emotion/styled/macro';
 
-export const LoadLoreButton = styled.button`
+export const LoadMoreButton = styled.button`
   display: block;
   margin: 0 auto;
   padding: 8px 16px;
