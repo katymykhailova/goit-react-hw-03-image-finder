@@ -1,46 +1,52 @@
 import { Component } from 'react';
+
 import ImageGallery from 'components/ImageGallery';
 import apiService from 'services/apiService';
 import Button from 'components/Button';
-
-const Status = {
-  IDLE: 'idle',
-  PENDING: 'pending',
-  RESOLVED: 'resolved',
-  REJECTED: 'rejected',
-};
+import Loader from 'components/Loader';
 
 export default class FetchPictures extends Component {
   state = {
     pictures: [],
     error: null,
-    status: Status.IDLE,
     page: 1,
+    isLoading: false,
   };
 
   componentDidMount(prevProps, prevState) {
     this.props.getHeightGallery();
   }
 
-  async componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState) {
     const prevSearchQuery = prevProps.searchQuery;
     const nextSearchQuery = this.props.searchQuery;
 
-    const prevpictures = prevState.pictures;
-    const nextpictures = this.state.pictures;
+    const prevPictures = prevState.pictures;
+    const nextPictures = this.state.pictures;
 
     if (prevSearchQuery !== nextSearchQuery) {
-      this.setState({ pictures: [], page: 1, status: Status.PENDING });
-      this.fetchPictures();
+      this.setState({
+        pictures: [],
+        page: 1,
+        isLoading: true,
+      });
+      setTimeout(() => {
+        this.fetchPictures();
+      }, 500);
     }
-    if (nextpictures.length > prevpictures.length) {
+    if (nextPictures.length > prevPictures.length) {
       this.props.getHeightGallery();
     }
   }
 
   onLoadMore = e => {
     e.preventDefault();
-    this.fetchPictures();
+    this.setState({
+      isLoading: true,
+    });
+    setTimeout(() => {
+      this.fetchPictures();
+    }, 500);
   };
 
   async fetchPictures() {
@@ -52,50 +58,33 @@ export default class FetchPictures extends Component {
         this.setState(prevState => ({
           pictures: [...prevState.pictures, ...pictures],
           page: prevState.page + 1,
-          status: Status.RESOLVED,
+          isLoading: false,
         }));
       } else {
         this.setState({
           error: `Нет изображений по ключевому слову ${searchQuery}`,
-          status: Status.REJECTED,
+          isLoading: false,
         });
       }
     } catch (error) {
-      this.setState({ error, status: Status.REJECTED });
+      this.setState({ error });
     }
   }
 
   render() {
-    const { status, pictures } = this.state;
+    const { pictures, isLoading } = this.state;
     const { handleImageClick } = this.props;
 
-    if (status === 'idle') {
-      return <ImageGallery pictures={pictures} />;
-    }
-
-    if (status === 'pending') {
-      return <div></div>;
-      // return <PokemonPendingView pokemonName={pokemonName} />;
-    }
-
-    if (status === 'rejected') {
-      return <div></div>;
-
-      // return <PokemonErrorView message={error.message} />;
-    }
-
-    if (status === 'resolved') {
-      return (
-        <>
-          <ImageGallery
-            pictures={pictures}
-            handleImageClick={handleImageClick}
-          />
+    return (
+      <>
+        {isLoading && <Loader />}
+        <ImageGallery pictures={pictures} handleImageClick={handleImageClick} />
+        {pictures.length > 0 && (
           <Button onClick={this.onLoadMore} aria-label="add contact">
             Load more
           </Button>
-        </>
-      );
-    }
+        )}
+      </>
+    );
   }
 }
